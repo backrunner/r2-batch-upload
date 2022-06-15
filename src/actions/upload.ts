@@ -14,7 +14,8 @@ export const doUpload = async (runDir: string, config: R2Config) => {
   if (!files?.length) {
     throw new Error('No files to upload.');
   }
-  await Promise.allSettled(
+  const failed: string[] = [];
+  await Promise.all(
     files.map(async (file) => {
       const absoluteFilePath = path.resolve(runDir, file);
       const fileKey = config.flat ? getLastPartFileName(file) : file.replace(/^\.[\//]/, '');
@@ -32,7 +33,11 @@ export const doUpload = async (runDir: string, config: R2Config) => {
       } catch (err) {
         console.error(chalk.red(`${file} => ${config.bucket}:${fileKey}    ❌`));
         console.error(chalk.red(err));
+        failed.push(file);
       }
     }),
   );
+  return {
+    failed,
+  };
 };
