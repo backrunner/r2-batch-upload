@@ -1,10 +1,11 @@
 import { babel } from '@rollup/plugin-babel';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import fs from 'fs';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
-const external = Object.keys(pkg.dependencies || {}).concat(['fs/promises']);
+const external = Object.keys(pkg.dependencies || {}).concat(['fs/promises', 'aws-sdk/clients/s3']);
 
 const extensions = ['.js', '.ts'];
 
@@ -20,7 +21,9 @@ export default {
     nodeResolve({
       extensions,
       modulesOnly: true,
+      browser: false,
     }),
+    commonjs(),
     json(),
     babel({
       exclude: ['node_modules/**', './history/**'],

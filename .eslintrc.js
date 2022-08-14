@@ -3,4 +3,7 @@ module.exports = {
   env: {
     node: true,
   },
+  rules: {
+    'max-params': 0,
+  },
 };

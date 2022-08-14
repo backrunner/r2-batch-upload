@@ -12,7 +12,7 @@ export const getMD5OfFile = (filePath: string) => {
       reject(err);
     });
     stream.on('end', () => {
-      resolve(hash.digest('hex'));
+      resolve(hash.digest('base64'));
     });
   });
 };
