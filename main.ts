@@ -44,7 +44,7 @@ program.argument('[folder]', 'the folder to upload').action(async (folder?: stri
   }
 
   // get files
-  let files;
+  let files: string[];
   try {
     files = await collectFiles(baseFolderPath);
   } catch (err) {
@@ -55,9 +55,12 @@ program.argument('[folder]', 'the folder to upload').action(async (folder?: stri
   // upload files
   let failed;
   try {
-    failed = (await doUpload(baseFolderPath, r2Config)).failed;
+    failed = (await doUpload(baseFolderPath, files, r2Config)).failed;
   } catch (err) {
     console.error(chalk.red((err as Error).message));
+    fs.writeFileSync(path.resolve(process.cwd(), './upload_failed.json'), JSON.stringify(failed), {
+      encoding: 'utf-8',
+    });
     return process.exit(ERRORS.GET_FILES_FAILED);
   }
 
