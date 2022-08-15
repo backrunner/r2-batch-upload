@@ -16,6 +16,7 @@ program.name(name);
 program.version(version);
 
 program
+  .command('upload', { isDefault: true })
   .argument('<folder>', 'the folder to upload')
   .option('-c, --config <configPath>', 'path to r2 batch upload config file.')
   .option('-l, --limit <limit>', 'limit upload files count (useful for testing)')
